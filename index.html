@@ -1,108 +1,77 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <meta name="description" content="RESQuE — 24x7 emergency ambulance booking. Fast dispatch, GPS pickup guidance, trained EMT staff." />
-  <title>RESQuE — Ambulance Booking</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>RESQuE – Emergency Medical Services</title>
   <link rel="stylesheet" href="style.css" />
+  <meta name="description" content="RESQuE – 24x7 ambulance booking, medical support, and blood donation services." />
 </head>
 
-<body>
-  <main class="page">
+<body class="home-bg">
 
-    <header class="site-header">
-      <div class="brand">
-        <div class="logo">R</div>
-        <div class="title">RESquE</div>
+  <!-- NAVBAR -->
+  <nav class="navbar">
+    <div class="nav-brand">RESQuE</div>
+    <ul class="nav-links">
+      <li><a href="index.html" class="active">Home</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="services.html">Services</a></li>
+      <li><a href="donate-blood.html">Donate Blood</a></li>
+      <li><a href="donors.html">Donors</a></li>
+    </ul>
+  </nav>
+
+  <!-- HERO SECTION -->
+  <header class="hero-section">
+    <div class="hero-content">
+      <h1>Emergency Ambulance Services</h1>
+      <p>Fast response. Trained EMT staff. Available 24x7.</p>
+
+      <div class="hero-buttons">
+        <a href="tel:+919999999999" class="btn-call">Call Now</a>
+        <a href="#booking" class="btn-book">Book Ambulance</a>
       </div>
-      <div class="emergency-call">
-        EMERGENCY ONLY • <a href="tel:+919999999999">Call now</a>
-      </div>
-    </header>
+    </div>
+  </header>
 
-    <section class="hero">
-      <div class="hero-left">
-        <h1>Book an <span class="accent">ambulance</span> in under 30 seconds.</h1>
-        <p>Fill the form or tap the emergency call button for instant support. Your details are sent directly to the RESquE dispatch team.</p>
+  <!-- BOOKING SECTION -->
+  <section id="booking" class="booking-section">
+    <h2>Book an Ambulance</h2>
 
-        <ul class="features">
-          <li>Average response under 10 minutes*</li>
-          <li>Trained EMT staff & basic life support</li>
-          <li>GPS-based pickup guidance</li>
-        </ul>
-
-        <small class="muted">
-          *Actual response time depends on traffic and ambulance availability.
-        </small>
+    <form id="resque-form" class="booking-form">
+      <div class="form-group">
+        <label>Patient Name *</label>
+        <input type="text" id="patientName" required />
+        <div class="field-error" id="err-patientName"></div>
       </div>
 
-      <aside class="booking-panel" aria-labelledby="booking-heading">
-        <h2 id="booking-heading">Book an ambulance</h2>
+      <div class="form-group">
+        <label>Contact Number *</label>
+        <input type="text" id="phone" placeholder="+91 XXXXX XXXXX" required />
+        <div class="field-error" id="err-phone"></div>
+      </div>
 
-        <form id="resque-form" novalidate>
+      <div class="form-group">
+        <label>Pickup Location *</label>
+        <textarea id="pickup" required></textarea>
+        <button type="button" id="use-gps" class="btn-gps">Use GPS</button>
+        <div class="field-error" id="err-pickup"></div>
+      </div>
 
-          <div class="form-group">
-            <label for="patientName">Patient name *</label>
-            <input id="patientName" name="patientName" type="text" placeholder="Full name" required />
-            <div class="field-error" id="err-patientName"></div>
-          </div>
+      <div class="form-actions">
+        <button type="submit" class="btn-booking">Send via WhatsApp</button>
+        <div id="form-status"></div>
+      </div>
+    </form>
 
-          <div class="form-group">
-            <label for="phone">Contact number *</label>
-            <input id="phone" name="phone" inputmode="tel" placeholder="+91 9XXXXXXXXX" required />
-            <div class="field-error" id="err-phone"></div>
-          </div>
+    <a id="wa-link" target="_blank" style="display:none"></a>
+  </section>
 
-          <div class="form-group">
-            <label for="pickup">Pickup location *</label>
-            <textarea id="pickup" name="pickup" rows="2" placeholder="Exact address and nearby landmark" required></textarea>
-            <button type="button" id="use-gps" class="btn-small">Use GPS</button>
-            <div class="field-error" id="err-pickup"></div>
-          </div>
-
-          <div class="form-row">
-            <div class="form-group">
-              <label for="emergencyType">Emergency type</label>
-              <select id="emergencyType">
-                <option value="">Select</option>
-                <option value="trauma">Trauma</option>
-                <option value="medical">Medical</option>
-                <option value="maternity">Maternity</option>
-                <option value="other">Other</option>
-              </select>
-            </div>
-
-            <div class="form-group">
-              <label for="pickupTime">Pickup time</label>
-              <select id="pickupTime">
-                <option value="ASAP">Immediate (ASAP)</option>
-                <option value="scheduled">Schedule</option>
-              </select>
-            </div>
-          </div>
-
-          <div class="form-group">
-            <label for="notes">Additional notes (optional)</label>
-            <textarea id="notes" rows="2" placeholder="Age, condition, hospital preference, special instructions"></textarea>
-          </div>
-
-          <div class="form-actions">
-            <button type="submit" class="cta">Send booking via WhatsApp</button>
-            <div id="form-status"></div>
-          </div>
-
-        </form>
-
-        <a id="wa-link" href="#" target="_blank" style="display:none">WhatsApp</a>
-      </aside>
-    </section>
-
-    <footer class="site-footer">
-      <small>© RESQuE Ambulance. All rights reserved.</small>
-    </footer>
-
-  </main>
+  <!-- FOOTER -->
+  <footer class="footer">
+    <p>© 2025 RESQuE Emergency Services. All rights reserved.</p>
+  </footer>
 
   <script src="app.js"></script>
 </body>

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Donor List – RESQuE</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body class="donors-bg">
+
+  <!-- NAVBAR -->
+  <nav class="navbar">
+    <div class="nav-brand">RESQuE</div>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="services.html">Services</a></li>
+      <li><a href="donate-blood.html">Donate Blood</a></li>
+      <li><a href="donors.html" class="active">Donors</a></li>
+    </ul>
+  </nav>
+
+  <!-- PAGE HEADER -->
+  <header class="page-header">
+    <h1>Available Blood Donors</h1>
+    <p>Search and contact registered donors instantly.</p>
+  </header>
+
+  <!-- MAIN CONTENT -->
+  <section class="content-section">
+
+    <!-- Filters -->
+    <div class="filter-box">
+      <input type="text" id="searchName" placeholder="Search by name..." class="filter-input" />
+
+      <select id="filterBlood" class="filter-input">
+        <option value="">All Blood Groups</option>
+        <option>A+</option>
+        <option>A-</option>
+        <option>B+</option>
+        <option>B-</option>
+        <option>O+</option>
+        <option>O-</option>
+        <option>AB+</option>
+        <option>AB-</option>
+      </select>
+    </div>
+
+    <!-- Donor List -->
+    <div id="donorList" class="donor-list"></div>
+
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <p>© 2025 RESQuE Emergency Services. All rights reserved.</p>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>

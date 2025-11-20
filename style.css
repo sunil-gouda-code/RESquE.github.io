@@ -33,7 +33,7 @@ body.donors-bg {
 }
 
 /* actual image files (place in /images/) */
-body.home-bg { background-image: url('images/home-bg.jpg'); }
+body.home-bg { background-image: url('ambulance img.jpg'); }
 body.about-bg { background-image: url('images/about-bg.jpg'); }
 body.services-bg { background-image: url('images/services-bg.jpg'); }
 body.donate-bg { background-image: url('images/donate-bg.jpg'); }

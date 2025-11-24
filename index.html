@@ -1,78 +1,92 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>RESQuE – Emergency Medical Services</title>
-  <link rel="stylesheet" href="style.css" />
-  <meta name="description" content="RESQuE – 24x7 ambulance booking, medical support, and blood donation services." />
+    <meta charset="UTF-8" />
+    <title>RESquE - Book Ambulance</title>
+    <link rel="stylesheet" href="style.css" />
 </head>
 
-<body class="home-bg">
+<body>
 
-  <!-- NAVBAR -->
-  <nav class="navbar">
-    <div class="nav-brand">RESQuE</div>
-    <ul class="nav-links">
-      <li><a href="index.html" class="active">Home</a></li>
-      <li><a href="about.html">About</a></li>
-      <li><a href="services.html">Services</a></li>
-      <li><a href="donate-blood.html">Donate Blood</a></li>
-      <li><a href="donors.html">Donors</a></li>
-    </ul>
-  </nav>
-
-  <!-- HERO SECTION -->
-  <header class="hero-section">
-    <div class="hero-content">
-      <h1>Emergency Ambulance Services</h1>
-      <p>Fast response. Trained EMT staff. Available 24x7.</p>
-
-      <div class="hero-buttons">
-        <a href="tel:+918310927283" class="btn-call">Call Now</a>
-        <a href="#booking" class="btn-book">Book Ambulance</a>
-      </div>
+<!-- ===== NAVIGATION ===== -->
+<nav>
+    <div class="logo">
+        <div class="logo-main">RESquE</div>
+        <div class="logo-sub">ambulance</div>
     </div>
-  </header>
 
-  <!-- BOOKING SECTION -->
-  <section id="booking" class="booking-section">
-    <h2>Book an Ambulance</h2>
+    <div class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="service.html">Services</a>
+        <a href="donor.html">Donors</a>
+        <a href="donate-blood.html">Donate Blood</a>
+        <a href="about.html">About</a>
+    </div>
+</nav>
 
-    <form id="resque-form" class="booking-form">
-      <div class="form-group">
-        <label>Patient Name *</label>
-        <input type="text" id="patientName" required />
-        <div class="field-error" id="err-patientName"></div>
-      </div>
+<!-- ===== PREMIUM BOOKING FORM CARD ===== -->
+<div class="card">
+    <h1 class="booking-title">Book an Ambulance</h1>
 
-      <div class="form-group">
-        <label>Contact Number *</label>
-        <input type="text" id="phone" placeholder="+91 XXXXX XXXXX" required />
-        <div class="field-error" id="err-phone"></div>
-      </div>
+    <form id="resque-form">
 
-      <div class="form-group">
-        <label>Pickup Location *</label>
-        <textarea id="pickup" required></textarea>
-        <button type="button" id="use-gps" class="btn-gps">Use GPS</button>
-        <div class="field-error" id="err-pickup"></div>
-      </div>
+        <!-- Patient Name -->
+        <div class="form-group">
+            <label>Patient Name</label>
+            <input id="patientName" type="text" />
+            <div id="err-patientName" class="error"></div>
+        </div>
 
-      <div class="form-actions">
-        <button type="submit" class="btn-booking">Send via WhatsApp</button>
+        <!-- Phone -->
+        <div class="form-group">
+            <label>Contact Number</label>
+            <input id="phone" type="text" />
+            <div id="err-phone" class="error"></div>
+        </div>
+
+        <!-- Pickup Location -->
+        <div class="form-group">
+            <label>Pickup Location</label>
+            <input id="pickup" type="text" />
+            <div id="err-pickup" class="error"></div>
+            <button type="button" id="use-gps">Use GPS Location</button>
+        </div>
+
+        <!-- Emergency Type (PREMIUM DROPDOWN) -->
+        <div class="form-group">
+            <label>Emergency Type</label>
+            <div class="select-wrapper">
+                <select id="emergencyType">
+                    <option>Accident</option>
+                    <option>Heart Attack</option>
+                    <option>Pregnancy</option>
+                    <option>General Emergency</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Pickup Time -->
+        <div class="form-group">
+            <label>Pickup Time</label>
+            <input type="time" id="pickupTime" />
+        </div>
+
+        <!-- Notes -->
+        <div class="form-group">
+            <label>Notes (Optional)</label>
+            <textarea id="notes" rows="3"></textarea>
+        </div>
+
         <div id="form-status"></div>
-      </div>
+
+        <!-- Submit -->
+        <button type="submit">Send to WhatsApp</button>
+
     </form>
+</div>
 
-    <a id="wa-link" target="_blank" style="display:none"></a>
-  </section>
+<footer>© 2025 RESquE. All rights reserved.</footer>
 
-  <!-- FOOTER -->
-  <footer class="footer">
-    <p>© 2025 RESQuE Emergency Services. All rights reserved.</p>
-  </footer>
-
-  <script src="app.js"></script>
+<script src="app.js"></script>
 </body>
 </html>

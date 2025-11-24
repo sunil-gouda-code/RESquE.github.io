@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>RESquE - Donor List</title>
+    <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+
+<!-- ===== NAVIGATION ===== -->
+<nav>
+    <div class="logo">
+        <div class="logo-main">RESquE</div>
+        <div class="logo-sub">ambulance</div>
+    </div>
+
+    <div class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="service.html">Services</a>
+        <a href="donor.html">Donors</a>
+        <a href="donate-blood.html">Donate Blood</a>
+        <a href="about.html">About</a>
+    </div>
+</nav>
+
+<!-- ===== DONOR LIST CARD ===== -->
+<div class="card">
+    <h1 class="booking-title">Available Donors</h1>
+
+    <!-- Search Bar -->
+    <div class="form-group">
+        <label>Search Donor</label>
+        <input type="text" id="searchName" placeholder="Type donor name..." />
+    </div>
+
+    <!-- Blood Group Filter (PREMIUM DROPDOWN) -->
+    <div class="form-group">
+        <label>Filter by Blood Group</label>
+        <div class="select-wrapper">
+            <select id="filterBlood">
+                <option value="">All Groups</option>
+                <option>A+</option><option>A-</option>
+                <option>B+</option><option>B-</option>
+                <option>O+</option><option>O-</option>
+                <option>AB+</option><option>AB-</option>
+            </select>
+        </div>
+    </div>
+
+    <!-- Donor Cards Container -->
+    <div id="donorList"></div>
+</div>
+
+<footer>© 2025 RESquE. All rights reserved.</footer>
+
+<script src="app.js"></script>
+</body>
+</html>

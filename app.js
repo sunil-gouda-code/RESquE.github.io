@@ -1,8 +1,8 @@
 // app.js — Shared site behavior: booking, GPS, donors (localStorage), search/filter, nav
 (function () {
   // ====== CONFIG ======
-  // Replace with your dispatch WhatsApp number (no + or dashes)
-  const DISPATCH_NUMBER = "919999999999"; // <-- CHANGE THIS
+  // Your ambulance company WhatsApp number (no + or spaces)
+  const DISPATCH_NUMBER = "918310927283";
 
   // localStorage key for donors
   const DONOR_STORAGE_KEY = "resque_donors_v1";
@@ -45,24 +45,24 @@
     }
   }
 
-  // ====== NAV HIGHLIGHT (works on all pages) ======
+  // ====== NAV HIGHLIGHT ======
   function initNavActive() {
     const links = qsa(".nav-links a");
+    const current = location.pathname.split("/").pop();
+
     links.forEach((a) => {
-      if (a.href === location.href || a.getAttribute("href") === location.pathname.split("/").pop()) {
-        a.classList.add("active");
-      } else {
-        a.classList.remove("active");
-      }
+      const target = a.getAttribute("href");
+      if (target === current) a.classList.add("active");
+      else a.classList.remove("active");
     });
   }
 
-  // ====== BOOKING FORM (index.html or single-page booking) ======
+  // ====== BOOKING FORM ======
   function initBooking() {
     const form = qs("#resque-form");
     if (!form) return;
 
-    const statusEl = qs("#form-status") || document.createElement("div");
+    const statusEl = qs("#form-status");
     const useGpsBtn = qs("#use-gps");
     const waLink = qs("#wa-link");
 
@@ -79,6 +79,7 @@
           return;
         }
         setElementText(statusEl, "Finding location…");
+
         navigator.geolocation.getCurrentPosition(
           async (pos) => {
             const { latitude, longitude } = pos.coords;
@@ -93,7 +94,11 @@
           },
           (err) => {
             console.warn("geolocation error", err);
-            setElementText(statusEl, "Location permission denied or failed. Enter address manually.", true);
+            setElementText(
+              statusEl,
+              "Location permission denied or failed. Enter address manually.",
+              true
+            );
           },
           { timeout: 10000 }
         );
@@ -115,7 +120,7 @@
         ok = false;
       }
       if (!validPhone(phone)) {
-        showFieldError("phone", "Enter phone with country code (e.g. +91...).");
+        showFieldError("phone", "Enter valid phone number.");
         ok = false;
       }
       if (pickup.length < 5) {
@@ -128,6 +133,7 @@
     form.addEventListener("submit", (e) => {
       e.preventDefault();
       setElementText(statusEl, "");
+
       if (!validateBooking()) {
         setElementText(statusEl, "Fix errors before sending.", true);
         return;
@@ -137,7 +143,7 @@
         name: qs("#patientName").value.trim(),
         phone: qs("#phone").value.trim(),
         pickup: qs("#pickup").value.trim(),
-        emergency: qs("#emergencyType") ? qs("#emergencyType").value || "Not specified" : "Not specified",
+        emergency: qs("#emergencyType") ? qs("#emergencyType").value : "Not specified",
         time: qs("#pickupTime") ? qs("#pickupTime").value : "ASAP",
         notes: qs("#notes") ? qs("#notes").value.trim() || "None" : "None",
         sentAt: new Date().toLocaleString(),
@@ -148,22 +154,18 @@
         Patient: ${payload.name},
         Contact: ${payload.phone},
         Pickup: ${payload.pickup},
-        Emergency type: ${payload.emergency},
-        Pickup time: ${payload.time},
+        Emergency: ${payload.emergency},
+        Pickup Time: ${payload.time},
         Notes: ${payload.notes},
-        Sent at: ${payload.sentAt},
+        Sent At: ${payload.sentAt},
       ].join("\n");
 
       const waUrl = https://wa.me/${DISPATCH_NUMBER}?text=${encodeURIComponent(message)};
 
-      setElementText(statusEl, "Opening WhatsApp — press Send to complete the booking.");
-      // try to open in new tab; on mobile this opens WhatsApp app
+      setElementText(statusEl, "Opening WhatsApp… Press Send to confirm.");
       window.open(waUrl, "_blank", "noopener");
-      // For extra compatibility, update hidden link if present
-      if (waLink) {
-        waLink.href = waUrl;
-        // if you wanted to click it programmatically: waLink.click()
-      }
+
+      if (waLink) waLink.href = waUrl;
     });
   }
 
@@ -173,10 +175,11 @@
       const raw = localStorage.getItem(DONOR_STORAGE_KEY);
       return raw ? JSON.parse(raw) : [];
     } catch (err) {
-      console.warn("Failed to parse donors from localStorage", err);
+      console.warn("Failed to parse donors", err);
       return [];
     }
   }
+
   function saveDonors(list) {
     localStorage.setItem(DONOR_STORAGE_KEY, JSON.stringify(list || []));
   }
@@ -186,109 +189,94 @@
     if (!form) return;
 
     const statusEl = qs("#donor-status");
-    const nameEl = qs("#donorName");
-    const phoneEl = qs("#donorPhone");
-    const bloodEl = qs("#donorBlood");
-    const cityEl = qs("#donorCity");
-    const notesEl = qs("#donorNotes");
-
-    function showErr(id, msg) {
-      const el = qs(#err-${id});
-      if (el) el.textContent = msg || "";
-    }
 
     form.addEventListener("submit", (e) => {
       e.preventDefault();
-      // clear errors
-      showErr("donorName", "");
-      showErr("donorPhone", "");
-      showErr("donorBlood", "");
-      showErr("donorCity", "");
+
+      const name = qs("#donorName").value.trim();
+      const phone = qs("#donorPhone").value.trim();
+      const blood = qs("#donorBlood").value;
+      const city = qs("#donorCity").value.trim();
+      const notes = qs("#donorNotes").value.trim();
+
+      // Reset errors
+      ["donorName", "donorPhone", "donorBlood", "donorCity"].forEach((id) => {
+        qs(#err-${id}).textContent = "";
+      });
       setElementText(statusEl, "");
 
-      const name = nameEl.value.trim();
-      const phone = phoneEl.value.trim();
-      const blood = bloodEl.value;
-      const city = cityEl.value.trim();
-      const notes = notesEl.value.trim();
-
       let ok = true;
+
       if (name.length < 2) {
-        showErr("donorName", "Enter your full name.");
+        qs("#err-donorName").textContent = "Enter your full name.";
         ok = false;
       }
       if (!validPhone(phone)) {
-        showErr("donorPhone", "Enter valid phone with country code.");
+        qs("#err-donorPhone").textContent = "Enter valid phone number.";
         ok = false;
       }
       if (!blood) {
-        showErr("donorBlood", "Choose your blood group.");
+        qs("#err-donorBlood").textContent = "Select a blood group.";
         ok = false;
       }
       if (city.length < 2) {
-        showErr("donorCity", "Enter your city/area.");
+        qs("#err-donorCity").textContent = "Enter your city.";
         ok = false;
       }
+
       if (!ok) {
         setElementText(statusEl, "Fix errors above to register.", true);
         return;
       }
 
-      // Save donor
       const donors = getDonors();
-      const now = new Date().toISOString();
-      const record = {
+      donors.unshift({
         id: "d_" + Math.random().toString(36).slice(2, 9),
         name,
         phone: normalizePhone(phone),
         blood,
         city,
         notes,
-        createdAt: now,
-      };
-      donors.unshift(record); // newest first
-      saveDonors(donors);
+        createdAt: new Date().toISOString(),
+      });
 
-      // reset form (keep phone? we clear all)
+      saveDonors(donors);
       form.reset();
-      setElementText(statusEl, "Thanks — you are registered as a donor. We appreciate it!");
-      // if donors list is visible on same page, refresh it (rare)
+      setElementText(statusEl, "Thank you — you are now registered as a donor!");
       renderDonorList();
     });
   }
 
-  // ====== DONORS PAGE: RENDER + FILTER + SEARCH ======
-  function createPhoneLink(phone) {
-    // phone should be normalized
-    if (!phone) return "#";
-    return tel:${phone};
-  }
-
+  // ====== DONOR LIST ======
   function donorCardHtml(d) {
-    const safeNotes = d.notes ? d.notes : "";
-    const phoneDisplay = d.phone.startsWith("+") ? d.phone : d.phone;
+    const notes = d.notes || "";
     return `
       <div class="donor-card" data-id="${d.id}">
         <div class="donor-row">
           <div class="donor-left">
             <div class="donor-name">${escapeHtml(d.name)}</div>
-            <div class="donor-meta">Blood: <strong>${escapeHtml(d.blood)}</strong> • ${escapeHtml(d.city)}</div>
-            <div class="donor-notes">${escapeHtml(safeNotes)}</div>
+            <div class="donor-meta">
+              Blood: <strong>${escapeHtml(d.blood)}</strong> • ${escapeHtml(d.city)}
+            </div>
+            <div class="donor-notes">${escapeHtml(notes)}</div>
           </div>
+
           <div class="donor-actions">
-            <a class="donor-call" href="${createPhoneLink(d.phone)}" aria-label="Call ${escapeHtml(
-      d.name
-    )}">Call</a>
-            <a class="donor-wa" href="https://wa.me/${d.phone}?text=${encodeURIComponent(
-      Hi ${d.name}, I found your contact on RESQuE donor list. Are you available to donate blood?
-    )}" target="_blank" rel="noopener">WhatsApp</a>
+            <a class="donor-call" href="tel:${d.phone}">Call</a>
+            <a 
+              class="donor-wa" 
+              target="_blank"
+              href="https://wa.me/${d.phone}?text=${encodeURIComponent(
+                Hi ${d.name}, I found your contact on RESQuE. Are you available to donate blood?
+              )}">
+              WhatsApp
+            </a>
           </div>
         </div>
       </div>
     `;
   }
 
-  // small HTML-escape function to avoid accidental injection when reading localStorage
   function escapeHtml(str) {
     if (!str) return "";
     return String(str)
@@ -302,60 +290,57 @@
   function renderDonorList() {
     const container = qs("#donorList");
     if (!container) return;
+
     const donors = getDonors();
     if (!donors.length) {
-      container.innerHTML = <div class="empty">No donors registered yet. Ask volunteers to register or add from the <a href="donate-blood.html">Donate Blood</a> page.</div>;
+      container.innerHTML = <div class="empty">No donors available yet.</div>;
       return;
     }
+
     container.innerHTML = donors.map(donorCardHtml).join("");
-    // Attach event listeners if you need any dynamic behaviour later
   }
 
   function initDonorFilters() {
     const searchInput = qs("#searchName");
     const bloodFilter = qs("#filterBlood");
     const listContainer = qs("#donorList");
+
     if (!listContainer) return;
 
     function applyFilters() {
-      const q = (searchInput && searchInput.value.trim().toLowerCase()) || "";
-      const bg = (bloodFilter && bloodFilter.value) || "";
+      const q = (searchInput?.value.trim().toLowerCase()) || "";
+      const bg = bloodFilter?.value || "";
+
       const donors = getDonors();
       const filtered = donors.filter((d) => {
-        const matchesName = q ? d.name.toLowerCase().includes(q) : true;
-        const matchesBg = bg ? d.blood === bg : true;
-        return matchesName && matchesBg;
+        const matchName = q ? d.name.toLowerCase().includes(q) : true;
+        const matchBg = bg ? d.blood === bg : true;
+        return matchName && matchBg;
       });
+
       if (!filtered.length) {
         listContainer.innerHTML = <div class="empty">No matching donors.</div>;
         return;
       }
+
       listContainer.innerHTML = filtered.map(donorCardHtml).join("");
     }
 
     if (searchInput) searchInput.addEventListener("input", applyFilters);
     if (bloodFilter) bloodFilter.addEventListener("change", applyFilters);
 
-    // initial render
     applyFilters();
   }
 
-  // ====== INIT ALL ======
+  // ====== INIT ======
   function init() {
     initNavActive();
     initBooking();
     initDonorForm();
-    // donors page features
     renderDonorList();
     initDonorFilters();
-    // other minor helpers
-    window.addEventListener("storage", () => {
-      // if donors updated in other tab, refresh list
-      renderDonorList();
-    });
   }
 
-  // Run when DOM is ready
   if (document.readyState === "loading") {
     document.addEventListener("DOMContentLoaded", init);
   } else {
